@@ -3,11 +3,11 @@ from modules.ui.mouse import mouse
 
 class HitBox:
 
-    def __init__(self):
-        self._x = 0
-        self._y = 0
-        self._width = 0
-        self._height = 0
+    def __init__(self,x=0,y=0,width=0,height=0):
+        self._x = x
+        self._y = y
+        self._width = width
+        self._height = height
         
         self._recalculate_rect()
 

@@ -13,6 +13,8 @@ class Path(Node):
         self.current_point = None
         self.paths = []
         self.hitboxs = []
+        self.inputs = []
+        self.outputs = []
         self.grid_size = data.UI_EDITOR_GRID_SIZE
         
     def click(self):
@@ -42,6 +44,10 @@ class Path(Node):
             self.hitboxs.append(horizontal_hitbox)
             self.hitboxs.append(vertical_hitbox)
             self.current_point = mouse.cursor
+
+    def finish(self):
+        self.click()
+        self.current_point = None
 
     def draw(self):
         

@@ -1,4 +1,6 @@
 from modules.ui import Window, EditorView
+import platform
+import os
 
 def start():
 

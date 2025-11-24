@@ -13,8 +13,8 @@ class Gate(Node):
 
         self.grid_size = data.UI_EDITOR_GRID_SIZE
 
-        self.x = 100
-        self.y = 200
+        self.x = 100 + self.grid_size/2
+        self.y = 200 + self.grid_size/2
 
         self.inputs = [0,1]
         self.outputs = [0]
@@ -43,22 +43,52 @@ class Gate(Node):
         self.entity.height = self.height
 
         self.inputs_position = []
+        self.outputs_position = []
+
+        self.inputs_hitboxes = []
+        self.outputs_hibtoxes = []
 
         for i in range(len(self.inputs)):
             self.inputs_position.append((self.x-self.grid_size,self.y + self.height - ((i*2+1)*self.grid_size)))
-
-        self.outputs_position = []
+            self.inputs_hitboxes.append(
+                HitBox(x=self.x-self.grid_size,y=self.y + self.height - ((i*2+1)*self.grid_size),width=self.grid_size,height=self.grid_size)
+            )
 
         for i in range(len(self.outputs)):
             self.outputs_position.append((self.x+self.width,self.y + self.height - ((i*2+1)*self.grid_size)))
+            self.outputs_hibtoxes.append(
+                HitBox(x=self.x+self.width,y=self.y + self.height - ((i*2+1)*self.grid_size),width=self.grid_size,height=self.grid_size)
+            )
 
     def draw(self):
         self.entity.draw()
         self.text.draw()
 
-        for i in self.inputs_position:
+        for a in range(len(self.inputs_position)):
+            i = self.inputs_position[a]
             arcade.draw_rect_filled(arcade.XYWH(i[0],i[1],self.grid_size,self.grid_size,anchor=arcade.Vec2(0,0)),color=arcade.color.AMARANTH_PINK)
+            self.inputs_hitboxes[a].draw()
 
-        for i in self.outputs_position:
+        for a in range(len(self.outputs_position)):
+            i = self.outputs_position[a]
             arcade.draw_rect_filled(arcade.XYWH(i[0],i[1],self.grid_size,self.grid_size,anchor=arcade.Vec2(0,0)),color=arcade.color.CANDY_APPLE_RED)
+            self.outputs_hibtoxes[a].draw()
 
+
+    @property
+    def touched(self):
+
+        touched = False
+
+        for a in range(len(self.inputs_hitboxes)):
+            i = self.inputs_hitboxes[a]
+            if i.touched:
+                touched = (1,a)
+
+
+        for a in range(len(self.outputs_hibtoxes)):
+            i = self.outputs_hibtoxes[a]
+            if i.touched:
+                touched = (2,a)
+
+        return touched
