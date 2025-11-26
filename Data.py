@@ -87,7 +87,9 @@ def comp_impb(input_a, input_b):
     return comp_nor(input_a, comp_not(input_b))
 
 def truth_table():
-    return comp_and(a,a), comp_and(a,b), comp_and()
+    return comp_and(a,a), comp_and(a,b), comp_and(b,a), comp_and(b,b),\
+        comp_not(a), comp_not(b),\
+            
 
 a = True
 b = False
