@@ -89,6 +89,13 @@ def comp_impb(input_a, input_b):
 def truth_table():
     return comp_and(a,a), comp_and(a,b), comp_and(b,a), comp_and(b,b),\
         comp_not(a), comp_not(b),\
+        comp_or(a,a), comp_or(a,b), comp_or(b,a), comp_or(b,b),\
+        comp_nand(a,a), comp_nand(a,b), comp_nand(b,a), comp_nand(b,b),\
+        comp_xor(a,a), comp_xor(a,b), comp_xor(b,a), comp_xor(b,b),\
+        comp_nor(a,a), comp_nor(a,b), comp_nor(b,a), comp_nor(b,b),\
+        comp_nxor(a,a), comp_nxor(a,b), comp_nxor(b,a), comp_nxor(b,b),\
+        comp_impa(a,a), comp_impa(a,b), comp_impa(b,a), comp_impa(b,b),\
+        comp_impb(a,a), comp_impb(a,b), comp_impb(b,a), comp_impb(b,b)\
             
 
 a = True
