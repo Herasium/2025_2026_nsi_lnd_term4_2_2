@@ -1,11 +1,11 @@
-from modules.ui import Window, EditorView
+from modules.ui import Window, EditorView, GameView
 import platform
 import os
 
 def start():
 
     windows = Window()
-    view = EditorView()
+    view = GameView()
 
     windows.display(view)
     windows.run()
