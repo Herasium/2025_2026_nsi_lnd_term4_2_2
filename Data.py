@@ -87,16 +87,19 @@ def comp_impb(input_a, input_b):
     return comp_nor(input_a, comp_not(input_b))
             
 def full_adder(input_a, input_b, carry_in):
+    input_a, input_b, carry_in = 1*input_a, 1*input_b, 1*carry_in
     sum = comp_xor(input_a, input_b)
     sum = comp_xor(sum, carry_in)
     carry_out = comp_and(input_a, input_b)
     carry_out = comp_or(carry_out, comp_and(carry_in, comp_xor(input_a, input_b)))
-    return sum, carry_out
+    return 1*sum, 1*carry_out
 
 def calculator(input_a, input_b, carry_in, bits):
+    result = 0
     while bits > 0:
+        sum, carry_out = full_adder(input_a, input_b, carry_in)
+        result = (2**(bits-1))*(sum + carry_out) + result
         bits -= 1
-        result = (2**(bits-1))*(1*(full_adder(input_a, input_b, carry_in)))
     return result
 
 def truth_table():
@@ -117,4 +120,4 @@ a = True
 b = False
 
 # print(truth_table())
-print(calculator(a, a, a, 2))
+print(calculator(a, a, a, 3))
