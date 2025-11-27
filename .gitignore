@@ -1,0 +1,25 @@
+# Ignore everything
+*
+
+# But not these files:
+!.gitignore
+!*.py
+
+# Optional: allow folders that contain Python files
+!*/
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignore virtual environments
+venv/
+.env/
+.venv/
+
+# Common Python tool caches
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/

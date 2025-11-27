@@ -4,8 +4,8 @@ from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
 from modules.ui.toolbox.grid import Grid
 
-from modules.ui.toolbox.nodes.path import Path
-from modules.ui.toolbox.nodes.gate import Gate
+from modules.data.nodes.path import Path
+from modules.data.nodes.gate import Gate
 
 from modules.data import data
 
