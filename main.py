@@ -3,8 +3,6 @@ import platform
 import os
 from modules.data import data
 
-
-
 windows = Window()
 data.window = windows
 
