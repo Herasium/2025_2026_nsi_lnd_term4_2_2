@@ -70,15 +70,23 @@ class Gate(Node):
         self.outputs_hibtoxes = []
 
         for i in range(len(self.inputs)):
-            self.inputs_position.append((self.x-self.grid_size,self.y + self.height - ((i*2+1)*self.grid_size)))
+
+            y = self.y + self.height - ((i * 2 + 1) * self.grid_size)
+            x = self.x - self.grid_size
+
+            self.inputs_position.append((x, y))
             self.inputs_hitboxes.append(
-                HitBox(x=self.x-self.grid_size,y=self.y + self.height - ((i*2+1)*self.grid_size),width=self.grid_size,height=self.grid_size)
+                HitBox(x=x, y=y, width=self.grid_size, height=self.grid_size)
             )
 
         for i in range(len(self.outputs)):
-            self.outputs_position.append((self.x+self.width,self.y + self.height - ((i*2+1)*self.grid_size)))
+
+            y = self.y + self.height - ((i * 2 + 1) * self.grid_size)
+            x = self.x + self.width
+
+            self.outputs_position.append((x, y))
             self.outputs_hibtoxes.append(
-                HitBox(x=self.x+self.width,y=self.y + self.height - ((i*2+1)*self.grid_size),width=self.grid_size,height=self.grid_size)
+                HitBox(x=x, y=y, width=self.grid_size, height=self.grid_size)
             )
 
 

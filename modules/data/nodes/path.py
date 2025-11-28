@@ -31,10 +31,51 @@ class Path(Node):
         self.branch_points[0] = []
         self.branch_hitboxes[0] = PolyHitbox()
 
+    def project_point_onto_segments(self, x, y):
+        closest_point = None
+        closest_dist = float('inf')
+
+        for bid, pts in self.branch_points.items():
+            if len(pts) < 2:
+                continue
+
+            for i in range(len(pts) - 1):
+                x1, y1 = pts[i]
+                x2, y2 = pts[i + 1]
+
+                dx = x2 - x1
+                dy = y2 - y1
+                seg_len_sq = dx * dx + dy * dy
+                if seg_len_sq == 0:
+                    continue
+
+                t = ((x - x1) * dx + (y - y1) * dy) / seg_len_sq
+                t = max(0.0, min(1.0, t))  
+                px = x1 + t * dx
+                py = y1 + t * dy
+
+                dist_sq = (px - x)**2 + (py - y)**2
+                if dist_sq < closest_dist:
+                    closest_dist = dist_sq
+                    closest_point = (px, py)
+
+        return closest_point
+
 
     def add_path(self):
 
-        pt = (mouse.cursor[0], mouse.cursor[1])
+        if self.current_point == None:
+            if self.current_branch_count > 0:
+                snapped = self.project_point_onto_segments(mouse.cursor[0], mouse.cursor[1])
+                if snapped is not None:
+                    pt = snapped
+                else:
+                    pt = (mouse.cursor[0], mouse.cursor[1])
+            else:
+                pt = (mouse.cursor[0], mouse.cursor[1])
+        else:
+            pt = (mouse.cursor[0], mouse.cursor[1])
+            
         self.points.append(pt)
         self.branch_points[self.current_branch_count].append(pt)
 
@@ -69,6 +110,8 @@ class Path(Node):
         # Draw ALL branch lines
         for bid, pts in self.branch_points.items():
             if len(pts) > 1:
+
+                arcade.draw_circle_filled(center_x=pts[0][0],center_y=pts[0][1],radius=self.thickness,color=self.color)
                 arcade.draw_line_strip(
                     point_list=pts,
                     color=self.color,
