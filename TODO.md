@@ -1,0 +1,2 @@
+- [x] Fix __repr__ method in ABR class to properly handle None subtrees
+- [x] Rewrite ajoute function as recursive insert for ABR
