@@ -39,7 +39,7 @@ class GameView(arcade.View):
         self.button_quit.text.x = 280
         self.button_quit.text.y = 355
         
-        arcade.load_font("modules/ui/main_menu/UniversCondensed.ttf")
+        arcade.load_font("assets/UniverseCondensed.ttf")
 
         self.titre = arcade.Text(
             "Hello",

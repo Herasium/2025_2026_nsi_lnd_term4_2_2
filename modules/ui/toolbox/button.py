@@ -14,8 +14,6 @@ class Button:
         self._color = arcade.color.BLUE
         self.hitbox = HitBox()
 
-        arcade.load_font("modules/ui/main_menu/UniversCondensed.ttf")
-
         self._name = ""
         self._text = ""
 
