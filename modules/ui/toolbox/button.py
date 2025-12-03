@@ -68,7 +68,7 @@ class Button:
             self._x,
             self._y,
             arcade.color.BLACK,
-            24, 
+            18, 
             anchor_x = "center",
             anchor_y = "center",
             font_name = "Press Start 2P"

@@ -70,25 +70,15 @@ class GameView(arcade.View):
         self.button_quit.draw()
         self.titre.draw()
 
-
-        current = 0
-        for y in range(7):
-            for x in range(28):
-
-                tile_x = x * 64 
-                tile_y = y * 64
-
-                rect = arcade.XYWH(
-                        x=tile_x,
-                        y=tile_y,
+        arcade.draw_texture_rect(self.ui_tiles[38],arcade.XYWH(
+                        x=0,
+                        y=0,
                         width=64,
                         height=64,
                         anchor=arcade.Vec2(0,0)
-                    )
+                    ))
 
 
-                arcade.draw_texture_rect(self.ui_tiles[current],rect)
-                current += 1
 
     def on_update(self, delta_time):
         """
