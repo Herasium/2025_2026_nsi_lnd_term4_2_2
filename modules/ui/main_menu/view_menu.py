@@ -47,6 +47,15 @@ class GameView(arcade.View):
             font_name = "Press Start 2P"
         )
 
+        self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
+
+        self.ui_tiles = self.ui_sheet.get_texture_grid(
+            size=(32, 32),
+            columns=28,
+            count=7*28,
+        )
+
+
     def reset(self):
         """Reset the game to the initial state."""
         # Do changes needed to restart the game here if you want to support that
@@ -60,6 +69,16 @@ class GameView(arcade.View):
         self.button_play.draw()
         self.button_quit.draw()
         self.titre.draw()
+
+        arcade.draw_texture_rect(self.ui_tiles[38],arcade.XYWH(
+                        x=0,
+                        y=0,
+                        width=64,
+                        height=64,
+                        anchor=arcade.Vec2(0,0)
+                    ))
+
+
 
     def on_update(self, delta_time):
         """
