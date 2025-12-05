@@ -19,7 +19,15 @@ class GameView(arcade.View):
 
         self.background_color = arcade.color.JET
 
-        self.button_play = Button()
+        self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
+
+        self.ui_tiles = self.ui_sheet.get_texture_grid(
+            size=(32, 32),
+            columns=28,
+            count=7*28,
+        )
+
+        self.button_play = Button(self.ui_tiles)
         self.button_play.x = 120
         self.button_play.y = 540
         self.button_play.width = 340
@@ -29,7 +37,7 @@ class GameView(arcade.View):
         self.button_play.text.x = 280
         self.button_play.text.y = 495
 
-        self.button_quit = Button()
+        self.button_quit = Button(self.ui_tiles)
         self.button_quit.x = 120
         self.button_quit.y = 400
         self.button_quit.width = 340
@@ -45,14 +53,6 @@ class GameView(arcade.View):
             y = 700,
             font_size = 50,
             font_name = "Press Start 2P"
-        )
-
-        self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
-
-        self.ui_tiles = self.ui_sheet.get_texture_grid(
-            size=(32, 32),
-            columns=28,
-            count=7*28,
         )
 
 
