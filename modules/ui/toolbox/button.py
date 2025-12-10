@@ -84,23 +84,23 @@ class Button:
 
     def draw_tiles(self):
     
-        gate_tile_pattern = [7,6,6,0,6,8,26,10,10,1,10,19,31,13,13,13,13,25,28,2,2,2,2,27]
-        width = 6
-        height = 4
+        gate_tile_pattern = [47, 48, 48, 48, 48, 48, 48, 48, 48, 49, 24, 25, 25, 25, 25, 25, 25, 25, 25, 26]
+        width = 10
+        height = 2
 
         current = 0
         for y in range(height):
             for x in range(width):
 
                 tile_x = x * self.grid_size + self.x
-                tile_y = y * self.grid_size + self.y
+                tile_y = (y-0.75) * self.grid_size + self.y 
 
                 rect = arcade.XYWH(
-                    x=tile_x,
-                    y=tile_y,
-                    width=self.grid_size,
-                    height=self.grid_size,
-                    anchor=arcade.Vec2(0,0)
+                    x = tile_x,
+                    y = tile_y,
+                    width = self.grid_size * 3,
+                    height = self.grid_size * 3,
+                    anchor = arcade.Vec2(0,1)
                 )
 
 
@@ -142,10 +142,10 @@ class Button:
 
     def draw(self):
         self.draw_tiles()
-        arcade.draw_rect_filled(
-            arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=arcade.Vec2(0,1)),
-            self._color,
-        )
+        # arcade.draw_rect_filled(
+        #     arcade.rect.XYWH(self._x, self._y, self._width, self._height,anchor=arcade.Vec2(0,1)),
+        #     self._color,
+        # )
         self.text.draw()
 
     @property

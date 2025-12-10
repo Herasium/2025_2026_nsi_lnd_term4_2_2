@@ -104,10 +104,10 @@ class Gate(Node):
         self.max = max(len(self.inputs),len(self.outputs)) +1 
 
         self.text.x = self.x + self.grid_size * 3 + 1 
-        self.text.y = self.y + self.height /2 + self.grid_size/4
+        self.text.y = self.y + self.height /1.6 + self.grid_size/4
 
         self.bg_text.x = self.x + self.grid_size * 3 - 1
-        self.bg_text.y = self.y + self.height /2 + self.grid_size/4 + 2
+        self.bg_text.y = self.y + self.height /1.6 + self.grid_size/4 + 2
 
 
         self.entity.x = self.x
