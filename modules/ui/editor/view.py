@@ -8,8 +8,11 @@ from modules.ui.toolbox.id_generator import random_id
 
 from modules.data.nodes.path import Path
 from modules.data.nodes.gate import Gate
+from modules.data.nodes.input import Input
 
 from modules.data import data
+
+from modules.engine.logic import propagate_values
 
 
 class EditorView(arcade.View):
@@ -26,6 +29,12 @@ class EditorView(arcade.View):
         self.selected_follower = None
         self.moving_gate = None
         self.current_path = None
+
+        self.simulate_button = Entity()
+        self.simulate_button.width = 100
+        self.simulate_button.height = 100
+
+        self.selected_cursor = 1
 
         # changed
         self.gates = {}   # id : Gate
@@ -52,6 +61,7 @@ class EditorView(arcade.View):
 
     def on_draw(self):
         self.clear()
+        self.simulate_button.draw()
 
         for p in self.paths.values():
             p.draw()
@@ -120,8 +130,14 @@ class EditorView(arcade.View):
                 if modified:
                     path.recalculate_hitbox()
 
+    def simulate(self):
+        propagate_values(self.gates,self.paths)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
+
+        if self.simulate_button.touched:
+            self.simulate()
+            return
 
         # Clicked a gate?
         for g in self.gates.values():
@@ -189,7 +205,10 @@ class EditorView(arcade.View):
 
         # Place new gate
         if self.selected_follower is None:
-            self.selected_follower = Gate(random_id(),self.gate_tiles)
+            if self.selected_cursor == 0:
+                self.selected_follower = Gate(random_id(),self.gate_tiles)
+            elif self.selected_cursor == 1:
+                self.selected_follower = Input(random_id(),self.gate_tiles)
             self.selected_follower.x = mouse.cursor[0] - self.grid_size / 2
             self.selected_follower.y = mouse.cursor[1] - self.grid_size / 2
 

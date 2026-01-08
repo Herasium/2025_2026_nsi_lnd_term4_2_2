@@ -1,8 +1,12 @@
 import arcade
+
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
 from modules.ui.editor.view import EditorView
+from modules.ui.debug_display_all_tiles.view import DebugTilesView
+
 from modules.data import data
+
 from pyglet.graphics import Batch
 
 class GameView(arcade.View):
@@ -90,7 +94,7 @@ class GameView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         if self.button_play.touched:
             data.window.hide()
-            data.window.display(EditorView())
+            data.window.display(DebugTilesView())
 
         if self.button_quit.touched:
             arcade.exit()
