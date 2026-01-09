@@ -1,6 +1,4 @@
 from modules.ui import Window, EditorView, GameView
-import platform
-import os
 from modules.data import data
 import arcade
 

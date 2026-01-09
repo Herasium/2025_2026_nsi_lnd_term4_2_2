@@ -128,6 +128,18 @@ class Path(Node):
 
         self.recalculate_hitbox()
 
+    def abort(self):
+        self.current_point = None
+
+        self.points = []
+
+        self.branch_points[self.current_branch_count] = []
+        self.branch_hitboxes[self.current_branch_count] = []
+
+        self.recalculate_hitbox()
+
+        print("Aborted",self)
+
     def draw(self):
 
         self.color = self.input_on_color if self.current_value else self.input_off_color
