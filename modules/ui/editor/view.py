@@ -85,6 +85,8 @@ class EditorView(arcade.View):
         if key == 97:  # "a"
             arcade.exit()
         if key == 65307:  # ESC
+            if self.current_path:
+                self.current_path.abort()
             self.current_path = None
             self.selected_follower = None
 

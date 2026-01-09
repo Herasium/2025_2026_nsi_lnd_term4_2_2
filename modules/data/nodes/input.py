@@ -20,9 +20,9 @@ class Input(Node):
         self._x = 0 + self.grid_size/2
         self._y = 0 + self.grid_size/2
 
-        self.outputs = [True]
+        self.outputs = [True,True]
 
-        self._name = "IN"
+        self._name = "Input"
 
         self.bg = Entity()
         self.bg.color = arcade.types.Color.from_hex_string("0F3FA8")
@@ -55,9 +55,9 @@ class Input(Node):
 
         self.tiles = tiles
 
- 
-        self.calculate_display()
         self.gen_tile_pattern()
+        self.calculate_display()
+        
 
     @property
     def name(self):
@@ -123,7 +123,7 @@ class Input(Node):
         for i in range(len(self.outputs)):
 
             y = self.y 
-            x = self.x + self.grid_size * (i+2)
+            x = self.x + (((self.gate_width - 2 - (len(self.outputs)))  / 2) + 1 + i - (len(self.outputs)%2/2))*self.grid_size 
 
             self.outputs_position.append((x + self.grid_size/2, y + self.grid_size/2))
             self.outputs_hitboxes.append(
@@ -132,10 +132,9 @@ class Input(Node):
 
     def gen_tile_pattern(self):
 
-        self.gate_width = (math.ceil(self.text.content_width / self.grid_size)+2)
         gate_tile_pattern = []
 
-       
+        self.gate_width = (math.ceil(self.text.content_width / self.grid_size)+2)
         to_fill = (self.gate_width - 2 - (len(self.outputs)))  / 2
 
         #Bottom Row
@@ -149,14 +148,14 @@ class Input(Node):
         gate_tile_pattern.append(8)
 
         #First Row
-        gate_tile_pattern.append(26)
+        gate_tile_pattern.append(30)
         for _ in range(math.floor(to_fill)):
             gate_tile_pattern.append(13)
         for _ in range(len(self.outputs)):
             gate_tile_pattern.append(10)
         for _ in range(math.ceil(to_fill)):
             gate_tile_pattern.append(13)
-        gate_tile_pattern.append(19)
+        gate_tile_pattern.append(32)
 
         #Second Row
         gate_tile_pattern.append(31)
