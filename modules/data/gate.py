@@ -56,6 +56,7 @@ class Gate(Node):
                 )
 
         self.tiles = tiles
+        self.draw_hitboxes = False
 
         self.calculate_display()
         self.gen_tile_pattern()
@@ -228,11 +229,13 @@ class Gate(Node):
         self.draw_tiles()
         self.bg_text.draw()
         self.text.draw()
-        for i in self.inputs_hitboxes:
-            i.draw()
-        for i in self.outputs_hitboxes:
-            i.draw()
-        self.entity.hitbox.draw()
+
+        if self.draw_hitboxes:
+            for i in self.inputs_hitboxes:
+                i.draw()
+            for i in self.outputs_hitboxes:
+                i.draw()
+            self.entity.hitbox.draw()
 
     @property
     def touched(self):

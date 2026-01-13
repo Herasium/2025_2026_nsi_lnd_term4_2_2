@@ -35,6 +35,7 @@ class Path(Node):
         self.input_on_color = arcade.types.Color.from_hex_string(data.COLORS.VALUE_ON)
 
         self.current_value = False
+        self.draw_hitboxes = False
 
     @profile
     def project_point_onto_segments(self, x, y):
@@ -161,9 +162,10 @@ class Path(Node):
                 line_width=self.thickness
             )
 
-        for i in self.branch_hitboxes:
-            for a in self.branch_hitboxes[i]:
-                a.draw()
+        if self.draw_hitboxes:
+            for i in self.branch_hitboxes:
+                for a in self.branch_hitboxes[i]:
+                    a.draw()
 
     def merge(self,path):
 

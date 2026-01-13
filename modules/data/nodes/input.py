@@ -55,6 +55,7 @@ class Input(Node):
                 )
 
         self.tiles = tiles
+        self.draw_hitboxes = False
 
         self.gen_tile_pattern()
         self.calculate_display()
@@ -209,9 +210,10 @@ class Input(Node):
         self.draw_tiles()
         self.bg_text.draw()
         self.text.draw()
-        for i in self.outputs_hitboxes:
-            i.draw()
-        self.entity.hitbox.draw()
+        if self.draw_hitboxes:
+            for i in self.outputs_hitboxes:
+                i.draw()
+            self.entity.hitbox.draw()
 
     def update(self):
         pass
