@@ -55,7 +55,7 @@ class MainMenuView(arcade.View):
 
         y_len = 11
 
-        for i in range(y_len):
+        for i in range(y_len-1):
             self.draw_tile(4,start_x,start_y - (i+1)*64)
             self.draw_tile(7,start_x+28*64,start_y - (i+1)*64)
 

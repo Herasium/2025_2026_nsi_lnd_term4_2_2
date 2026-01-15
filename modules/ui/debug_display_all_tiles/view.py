@@ -1,8 +1,5 @@
 import arcade
-# form modules.ui.mouse import mouse # (Unused in snippet, kept if needed)
 from modules.ui.toolbox.entity import Entity
-# from modules.ui.toolbox.grid import Grid # (Unused in snippet)
-# from modules.ui.toolbox.id_generator import random_id # (Unused in snippet)
 from modules.data import data
 
 class DebugTilesView(arcade.View):
@@ -16,9 +13,6 @@ class DebugTilesView(arcade.View):
         self.follower.height = self.grid_size
         self.follower.width = self.grid_size
 
-        # --- TILESET CONFIGURATION ---
-        # Define your list of tilesets here. 
-        # This makes it easy to add more without changing logic code.
         self.tilesets = [
             {
                 "name": "Gate Grid",
@@ -26,8 +20,8 @@ class DebugTilesView(arcade.View):
                 "tile_w": 27,
                 "tile_h": 27,
                 "columns": 6,
-                "count": 6 * 6, # Rows * Cols
-                "textures": []  # Will be populated automatically
+                "count": 6 * 6, 
+                "textures": []  
             },
             {
                 "name": "UI Grid",
@@ -49,19 +43,15 @@ class DebugTilesView(arcade.View):
             }
         ]
 
-        # Load textures for all defined tilesets
         self.load_tilesets()
 
-        # State tracking
         self.current_index = 0
         self.hovered_index = None
 
-        # Display settings
         self.display_start_x = 500
         self.display_start_y = 500
 
     def load_tilesets(self):
-        """Iterates through the config list and loads actual textures."""
         for ts in self.tilesets:
             try:
                 sheet = arcade.SpriteSheet(ts["path"])
@@ -77,21 +67,16 @@ class DebugTilesView(arcade.View):
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         self.hovered_index = None
         
-        # Get current config
         current_set = self.tilesets[self.current_index]
         cols = current_set["columns"]
         total_count = current_set["count"]
 
-        # Calculate grid position relative to the display offset
-        # Note: We divide by self.grid_size (display size), not tile source size
         grid_x = (x - self.display_start_x) // self.grid_size
         grid_y = (y - self.display_start_y) // self.grid_size
 
-        # Determine number of rows dynamically based on count and columns
         import math
         rows = math.ceil(total_count / cols)
 
-        # Check if mouse is within bounds of the current grid
         if 0 <= grid_x < cols and 0 <= grid_y < rows:
             index = int(grid_y * cols + grid_x)
             if 0 <= index < total_count:
@@ -104,7 +89,6 @@ class DebugTilesView(arcade.View):
         textures = current_set["textures"]
         cols = current_set["columns"]
 
-        # Draw the title of the current set
         arcade.draw_text(
             f"Current Set: {current_set['name']} (Arrow Keys to Switch)",
             self.display_start_x,
@@ -113,9 +97,7 @@ class DebugTilesView(arcade.View):
             14
         )
 
-        # Dynamic Drawing Loop
         for i, texture in enumerate(textures):
-            # Calculate grid coordinates based on index
             column_x = i % cols
             row_y = i // cols
 
@@ -132,7 +114,6 @@ class DebugTilesView(arcade.View):
 
             arcade.draw_texture_rect(texture, rect)
 
-        # Draw Hover Info
         if self.hovered_index is not None:
             arcade.draw_text(
                 f"Hovered: {self.hovered_index}",
@@ -146,21 +127,17 @@ class DebugTilesView(arcade.View):
         pass
 
     def on_key_press(self, key, key_modifiers):
-        # ESC Key
         if key == arcade.key.ESCAPE:
             self.current_path = None
             self.selected_follower = None
-        
-        # 'a' Key
+
         elif key == arcade.key.A:
             arcade.exit()
 
-        # Switch Tilesets: Right Arrow (Next)
         elif key == arcade.key.RIGHT:
             self.current_index = (self.current_index + 1) % len(self.tilesets)
             print(f"Switched to: {self.tilesets[self.current_index]['name']}")
 
-        # Switch Tilesets: Left Arrow (Previous)
         elif key == arcade.key.LEFT:
             self.current_index = (self.current_index - 1) % len(self.tilesets)
             print(f"Switched to: {self.tilesets[self.current_index]['name']}")
