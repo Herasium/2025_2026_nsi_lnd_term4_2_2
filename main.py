@@ -11,4 +11,3 @@ view = GameView()
 
 windows.display(view)
 windows.run()
- 

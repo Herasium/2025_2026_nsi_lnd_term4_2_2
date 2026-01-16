@@ -26,6 +26,23 @@ class MainMenuView(arcade.View):
 
         self.play_button_sprite = arcade.Sprite("assets/play_button.png")
 
+        self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
+
+        self.ui_tiles = self.ui_sheet.get_texture_grid(
+            size = (32, 32),
+            columns = 23,
+            count = 9*23,
+        )
+
+        self.play_button = Button(self.ui_tiles)
+        self.play_button.x = 1920 / 2 - 768 / 2 + 35
+        self.play_button.y = 260 + 320 + 100 + 768 / 6 - 25
+        self.play_button.width = 768 - 85
+        self.play_button.height = 768 / 3 - 50
+        self.play_button.scale = 1
+ 
+
+
     def on_key_press(self, key, key_modifiers):
         if key == 97: #"a"
             arcade.exit()
@@ -70,11 +87,33 @@ class MainMenuView(arcade.View):
         self.draw_tile(15,start_x+28*64,start_y- y_len*64)
 
         rect = arcade.XYWH(
-                x=1920/2,
-                y=260+320+100,
-                width=768,
-                height=768,
-                anchor=arcade.Vec2(0.5,0.5)
+                x = 1920 / 2,
+                y = 260 + 320 + 100,
+                width = 768,
+                height = 768,
+                anchor = arcade.Vec2(0.5,0.5)
         )
 
         arcade.draw_sprite_rect(self.play_button_sprite,rect)
+
+    def on_mouse_motion(self, x, y, delta_x, delta_y):
+        mouse.position = (x,y)
+        if self.play_button.rect.point_in_rect((x, y)):
+            print (f"soiris")
+        else:
+            pass
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        if self.play_button.touched:
+            data.window.hide()
+            print (f"Bouton préssé")
+            if key_modifiers == 16 or key_modifiers == 0:
+                data.window.display(EditorView())
+            elif key_modifiers == 17 or key_modifiers == 1:
+                data.window.display(DebugTilesView())
+            elif key_modifiers == 2 or key_modifiers == 18:
+                data.window.display(MainMenuView())
+
+            else:
+                print(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
+                data.window.display(EditorView())

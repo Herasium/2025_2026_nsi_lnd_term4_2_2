@@ -24,6 +24,8 @@ class Button:
 
         self.scale = 1.0
 
+        self._anchor = arcade.Vec2(0,1)
+
 
     @property
     def x(self):
@@ -61,6 +63,15 @@ class Button:
         self._height = value
         self._recalculate_rect()
 
+    @property
+    def anchor(self):
+        return self.anchor
+    
+    @anchor.setter
+    def anchor(self, value):
+        self._anchor = value
+        self._recalculate_rect()
+
     def _recalculate_rect(self):
 
         self.rect = arcade.XYWH(
@@ -68,7 +79,7 @@ class Button:
             y = self._y,
             width = self._width,
             height = self._height,
-            anchor = arcade.Vec2(0,1)
+            anchor = self._anchor
         )
         self._update_hitbox()
         
@@ -87,9 +98,10 @@ class Button:
 
     def draw_tiles(self):
     
-        gate_tile_pattern = [47, 48, 48, 48, 48, 48, 48, 48, 48, 49, 24, 25, 25, 25, 25, 25, 25, 25, 25, 26]
-        width = 10
+        gate_tile_pattern = [47, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 49, 24, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 26]
+        width = 12
         height = 2
+        tile_anchor = self._anchor
 
         scaled_grid = self.grid_size * self.scale
         tile_size = scaled_grid * 3
@@ -106,7 +118,7 @@ class Button:
                     y = tile_y,
                     width = tile_size,
                     height = tile_size,
-                    anchor = arcade.Vec2(0,1)
+                    anchor = tile_anchor
                 )
 
                 arcade.draw_texture_rect(self.tiles[gate_tile_pattern[current]],rect)
@@ -156,6 +168,7 @@ class Button:
         self.text.font_size = 18 * self.scale
 
         self.text.draw()
+        self.hitbox.draw()
 
     @property
     def touched(self):
