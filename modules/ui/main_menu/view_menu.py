@@ -117,7 +117,7 @@ class GameView(arcade.View):
                 data.window.display(EditorView())
             elif key_modifiers == 17 or key_modifiers == 1:
                 data.window.display(DebugTilesView())
-            elif key_modifiers == 2:
+            elif key_modifiers == 2 or key_modifiers == 18:
                 data.window.display(MainMenuView())
 
             else:

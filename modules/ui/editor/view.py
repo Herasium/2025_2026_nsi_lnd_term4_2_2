@@ -51,6 +51,8 @@ class EditorView(arcade.View):
         self.chip = Chip()
 
         self.moving_gate_offset = (0, 0)
+
+        self.camera_position = ()
         
         TILE_W = 27
         TILE_H = 27
