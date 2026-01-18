@@ -37,6 +37,8 @@ class Path(Node):
         self.current_value = False
         self.draw_hitboxes = False
 
+        self.do_points = True
+
     @profile
     def project_point_onto_segments(self, x, y):
         closest = {
@@ -145,9 +147,9 @@ class Path(Node):
 
         for bid, pts in self.branch_points.items():
             if len(pts) > 1:
-
-                arcade.draw_circle_filled(center_x=pts[0][0],center_y=pts[0][1],radius=self.thickness,color=self.color)
-                arcade.draw_circle_filled(center_x=pts[-1][0],center_y=pts[-1][1],radius=self.thickness,color=self.color)
+                if self.do_points:
+                    arcade.draw_circle_filled(center_x=pts[0][0],center_y=pts[0][1],radius=self.thickness,color=self.color)
+                    arcade.draw_circle_filled(center_x=pts[-1][0],center_y=pts[-1][1],radius=self.thickness,color=self.color)
                 arcade.draw_line_strip(
                     point_list=pts,
                     color=self.color,

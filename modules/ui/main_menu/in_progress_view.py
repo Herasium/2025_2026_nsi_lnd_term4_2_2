@@ -5,6 +5,8 @@ from modules.ui.toolbox.button import Button
 from modules.ui.editor.view import EditorView
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
 
+from modules.data.nodes.path import Path
+
 from modules.data import data
 
 from pyglet.graphics import Batch
@@ -42,7 +44,33 @@ class MainMenuView(arcade.View):
         self.play_button.height = 768 / 3 - 50
         self.play_button.scale = 1
  
+        self.paths = []
+        self.add_paths()
 
+    def add_paths(self):
+
+        branches = [
+            {0: [(945, 702), (594, 702), (594, 837), (270, 837), (270, 891)], 1: []},
+            {0: [(945, 702), (945, 648), (540, 648), (540, 540), (243, 540), (243, 648), (81, 648)], 1: []},
+            {0: [(945, 702), (945, 459), (675, 459), (675, 351), (189, 351), (189, 270), (81, 270)], 1: []},
+            {0: [(945, 702), (945, 351), (729, 351), (729, 216), (297, 216), (297, 81)], 1: []},
+            {0: [(945, 702), (972, 675), (972, 648), (1161, 648), (1161, 351), (1026, 351), (1026, 189), (918, 189), (918, 81)], 1: []},
+            {0: [(945, 702), (1188, 702), (1188, 297), (1350, 297), (1350, 135), (1512, 135), (1512, 81)], 1: []},
+            {0: [(945, 702), (1269, 702), (1269, 351), (1674, 351), (1674, 297), (1836, 297)], 1: []},
+            {0: [(945, 702), (1377, 702), (1377, 729), (1836, 729)], 1: []},
+            {0: [(945, 702), (1026, 729), (1296, 729), (1296, 891)], 1: []}
+        ]
+
+        for branch in branches:
+
+            self.paths.append(Path(""))
+            self.paths[len(self.paths)-1].do_points = False
+            self.paths[len(self.paths)-1].branch_points = branch
+
+    def draw_paths(self):
+
+        for i in self.paths:
+            i.draw()
 
     def on_key_press(self, key, key_modifiers):
         if key == 97: #"a"
@@ -61,7 +89,7 @@ class MainMenuView(arcade.View):
             arcade.draw_texture_rect(self.ui_border_tiles[id],rect)
 
     def on_draw(self):
-        self.clear()
+        self.clear(arcade.color.BLACK)
         
         start_x = 32
         start_y = 865
@@ -88,7 +116,7 @@ class MainMenuView(arcade.View):
         for i in range(23):
             self.draw_tile(13,start_x + (i+5)*64,start_y- y_len*64)
         self.draw_tile(15,start_x+28*64,start_y- y_len*64)
-
+        self.draw_paths()
         rect = arcade.XYWH(
                 x = 1920 / 2,
                 y = 260 + 320 + 100,
@@ -108,7 +136,7 @@ class MainMenuView(arcade.View):
         )
 
         arcade.draw_sprite_rect(self.name_banner_sprite,rect)
-
+        
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         mouse.position = (x,y)
@@ -118,6 +146,7 @@ class MainMenuView(arcade.View):
             pass
 
     def on_mouse_press(self, x, y, button, key_modifiers):
+        print(x,y)
         if self.play_button.touched:
             data.window.hide()
             print (f"Bouton préssé")

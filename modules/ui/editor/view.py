@@ -71,6 +71,27 @@ class EditorView(arcade.View):
         self.numpad_key_list = [65456,65457,65458,65459,65460,65461,65462,65463,65464,65465]
         self.add_side_bar()
 
+        self.ui_border_sheet = arcade.SpriteSheet("assets/ui_border_grid.png")
+
+        self.ui_border_tiles = self.ui_border_sheet.get_texture_grid(
+            size = (64, 64),
+            columns = 4,
+            count = 4*4,
+        )
+
+    def draw_tile(self,id,x,y):
+            
+            rect = arcade.XYWH(
+                x=x,
+                y=y,
+                width=64,
+                height=64,
+                anchor=arcade.Vec2(0,0)
+            )
+
+            arcade.draw_texture_rect(self.ui_border_tiles[id],rect)
+
+
     def add_side_bar(self):
         self.side_texts = []
 
@@ -98,6 +119,32 @@ class EditorView(arcade.View):
 
     def on_draw(self):
         self.clear()
+
+        start_x = 32
+        start_y = 865
+
+        self.draw_tile(0,start_x,start_y)
+        for i in range(27):
+            self.draw_tile(1,start_x + (i+1)*64,start_y)
+        self.draw_tile(3,start_x+28*64,start_y)
+
+        y_len = 13
+
+        for i in range(y_len-1):
+            self.draw_tile(4,start_x,start_y - (i+1)*64)
+            for a in range(27):
+                self.draw_tile(9,start_x + (a+1)*64,start_y- (i+1)*64)
+            self.draw_tile(7,start_x+28*64,start_y - (i+1)*64)
+
+
+        self.draw_tile(12,start_x,start_y - y_len*64)
+        self.draw_tile(13,start_x + 64,start_y- y_len*64)
+        self.draw_tile(5,start_x + 2*64,start_y- y_len*64)
+        self.draw_tile(6,start_x + 3*64,start_y- y_len*64)
+        self.draw_tile(10,start_x + 4*64,start_y- y_len*64)
+        for i in range(23):
+            self.draw_tile(13,start_x + (i+5)*64,start_y- y_len*64)
+        self.draw_tile(15,start_x+28*64,start_y- y_len*64)
 
         for p in self.chip.paths.values():
             p.draw()
@@ -206,7 +253,7 @@ class EditorView(arcade.View):
                         self.current_path.inputs.append([2, g.id, touched[1], 2, self.current_path.current_branch_count])
 
                     self.current_path.finish()
-
+                    print(self.current_path.points,"\n\n",self.current_path.branch_points)
                     if self.current_path.id not in self.chip.paths:
                         self.chip.paths[self.current_path.id] = self.current_path
 
