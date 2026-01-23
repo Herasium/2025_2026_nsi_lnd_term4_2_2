@@ -41,11 +41,19 @@ class MainMenuView(arcade.View):
         )
 
         self.play_button = Button(self.ui_tiles)
-        self.play_button.x = 1920 / 2 - 768 / 2 + 35
-        self.play_button.y = 260 + 320 + 100 + 768 / 6 - 25
-        self.play_button.width = 768 - 85
-        self.play_button.height = 768 / 3 - 50
+        self.play_button.x = 1920 / 2 - 700 / 2 - 5
+        self.play_button.y = 260 + 320 + 100 + 225 / 2
+        self.play_button.width = 700
+        self.play_button.height = 225
         self.play_button.scale = 1
+
+        self.quit_button = Button(self.ui_tiles)
+        self.quit_button.x = 1920 / 2 + (768/3*2) - 265 - 192 / 2
+        self.quit_button.y = 260 + 100 + 240 / 2
+        self.quit_button.width = 192
+        self.quit_button.height = 215
+        self.quit_button.scale = 1
+
 
         self.paths = []
         self.add_paths()
@@ -152,6 +160,9 @@ class MainMenuView(arcade.View):
         )
 
         arcade.draw_sprite_rect(self.quit_button_sprite,rect)
+
+        self.quit_button.draw()
+        self.play_button.draw()
         
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
@@ -176,3 +187,6 @@ class MainMenuView(arcade.View):
                 else:
                     print(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
                     data.window.display(EditorView())
+            
+            if self.quit_button.touched:
+                arcade.exit()

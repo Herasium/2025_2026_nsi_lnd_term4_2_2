@@ -158,7 +158,7 @@ class Button:
         self.hitbox.height = self._height
 
     def draw(self):
-        self.draw_tiles()
+        # self.draw_tiles()
         current_width = 10 * self.grid_size * self.scale
         current_height = 2 * self.grid_size * self.scale
         
