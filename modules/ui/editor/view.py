@@ -164,6 +164,29 @@ class EditorView(arcade.View):
         if key == 115: # s
             self.chip.save()
 
+                    
+        if key == 65288:
+            self.delete()
+
+    def delete_gate(self,id):
+        
+        for p in self.chip.paths.values():
+
+            for input in p.inputs:
+                if input[1] == id:
+                    p.remove_branch(input[4])
+
+            for output in p.outputs:
+                if output[1] == id:
+                    p.remove_branch(output[4])
+
+        del self.chip.gates[id]
+
+    def delete(self):
+
+        for g in self.chip.gates.values():
+            if g.entity.touched:
+                self.delete_gate(g.id)
 
     def on_key_release(self, key, key_modifiers):
         pass
@@ -201,7 +224,6 @@ class EditorView(arcade.View):
                     if i[3] == 1:
                         path.branch_points[i[4]][0] = self.moving_gate.inputs_position[i[2]]
                     elif i[3] == 2:
-                        print(i,path.branch_points,self.moving_gate.inputs_position)
                         path.branch_points[i[4]][-1] = self.moving_gate.inputs_position[i[2]]
 
                 if modified:

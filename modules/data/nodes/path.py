@@ -96,6 +96,20 @@ class Path(Node):
 
                     self.branch_hitboxes[current].append(PolyHitbox(polygon))
 
+    def remove_branch(self,branch):
+
+        for index in range(len(self.inputs)):
+            i = self.inputs[index]
+            if i[4] == branch:
+                self.inputs.pop(index)
+
+        for i in range(len(self.outputs)):
+            i = self.outputs[index]
+            if i[4] == branch:
+                self.outputs.pop(index)
+
+        del self.branch_hitboxes[branch]
+        del self.branch_points[branch]
 
     @profile
     def add_path(self):
