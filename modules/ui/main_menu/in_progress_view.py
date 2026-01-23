@@ -4,6 +4,7 @@ from modules.ui.mouse import mouse
 from modules.ui.toolbox.button import Button
 from modules.ui.editor.view import EditorView
 from modules.ui.debug_display_all_tiles.view import DebugTilesView
+from modules.ui.main_menu.settings_view import SettingView
 
 from modules.data.nodes.path import Path
 
@@ -53,6 +54,13 @@ class MainMenuView(arcade.View):
         self.quit_button.width = 192
         self.quit_button.height = 215
         self.quit_button.scale = 1
+
+        self.setting_button = Button(self.ui_tiles)
+        self.setting_button.x = 1920 / 2 - 700 / 2 - 5
+        self.setting_button.y = 260 + 100 + 240 / 2
+        self.setting_button.width = 192
+        self.setting_button.height = 215
+        self.setting_button.scale = 1
 
 
         self.paths = []
@@ -173,6 +181,7 @@ class MainMenuView(arcade.View):
 
         self.quit_button.draw()
         self.play_button.draw()
+        self.setting_button.draw()
         self.draw_frame_border()
         
 
@@ -201,3 +210,7 @@ class MainMenuView(arcade.View):
             
             if self.quit_button.touched:
                 arcade.exit()
+
+            if self.setting_button.touched:
+                data.window.display(SettingView())
+                print (f"bouton presse")
