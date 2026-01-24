@@ -1,6 +1,6 @@
 from modules.ui import Window, EditorView, MainMenuView
 from modules.data import data
-from modules.data.loader import load_saves,load_tiles, load_font
+from modules.data.loader import load_saves,load_tiles, load_font, load_textures
 import arcade
 import os
 
@@ -21,6 +21,9 @@ print("Loaded Tiles.")
 windows = Window()
 data.window = windows
 print("Created Window.")
+
+load_textures()
+print("Loaded textures.")
 
 load_saves()
 print("Loaded saves files.")

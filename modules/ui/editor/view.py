@@ -1,5 +1,6 @@
 import arcade
 from line_profiler import profile
+from PIL import Image
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
@@ -59,6 +60,23 @@ class EditorView(arcade.View):
 
         self.camera_hold = False
         self.fps = 0
+
+        self.bake_textures()
+
+
+    def bake_textures(self):
+
+        start_x = 0
+        y_len = int(1088/64)
+        start_y = 1088
+
+        new = Image.new("RGBA",(1920,1088))
+
+        for i in range(y_len):
+            for a in range(int(1920/64)):
+                new.paste(data.ui_border_tiles[9].image, (start_x + (a)*64,start_y- (i+1)*64))
+        
+        self.background_grid_texture = arcade.Texture(new)
 
 
     def draw_tile(self,id,x,y):
@@ -126,13 +144,16 @@ class EditorView(arcade.View):
 
     def draw_frame_background(self):
 
-        start_x = 0
-        start_y = 1080
-        y_len = 15
+        rect = arcade.XYWH(
+                x=0,
+                y=0,
+                width=1920,
+                height=1088,
+                anchor=arcade.Vec2(0,0)
+            )
 
-        for i in range(y_len-1):
-            for a in range(32):
-                self.draw_tile(9,start_x + (a)*64,start_y- (i+1)*64)
+        arcade.draw_texture_rect(self.background_grid_texture,rect)
+
 
     def draw_debug_text(self):
 
@@ -153,6 +174,7 @@ class EditorView(arcade.View):
                 font_name="Press Start 2P",
             )
 
+    @profile
     def on_draw(self):
         self.clear()
 
@@ -253,7 +275,7 @@ class EditorView(arcade.View):
         return self.camera_position
 
     @camera.setter
-    @profile
+    
     def camera(self,value):
         self._real_camera_position = value
         self.camera_position = ((self._real_camera_position[0] // data.UI_EDITOR_GRID_SIZE) * data.UI_EDITOR_GRID_SIZE,(self._real_camera_position[1] // data.UI_EDITOR_GRID_SIZE) * data.UI_EDITOR_GRID_SIZE)

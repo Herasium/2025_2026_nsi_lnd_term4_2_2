@@ -100,7 +100,7 @@ class Gate(Node):
         self._y = value
         self.calculate_display()    
 
-    @profile
+    
     def calculate_display_lite(self):
         self.text.x = self.x + self.width/2 + self._camera[0]
         self.text.y = self.y + self.height /1.6 + data.UI_EDITOR_GRID_SIZE/4 + self._camera[1]
@@ -117,7 +117,7 @@ class Gate(Node):
         self.bg._y = self.y-5
         self.bg._width = self.width+10
         self.bg._height = self.height+10
-    @profile
+    
     def calculate_display(self):
         self.both = len(self.inputs) > 0 and len(self.outputs) > 0
 
@@ -176,11 +176,11 @@ class Gate(Node):
         return self._camera
 
     @camera.setter
-    @profile
+    
     def camera(self,value):
         self._camera = value
         self.calculate_display()
-    @profile
+    
     def camera_moving(self,value):
         self._camera = value
         self.calculate_display_lite()
@@ -230,33 +230,33 @@ class Gate(Node):
 
         self.gate_tile_pattern = gate_tile_pattern
 
-
+    @profile
     def draw_tiles(self):
     
         width = self.tile_width
         height = 4
+        out = self.outputs.copy()
+        inp = self.inputs.copy()
 
-        current = 0
-        for y in range(height):
-            for x in range(width):
+        out.reverse()
+        inp.reverse()
 
-                tile_x = x * data.UI_EDITOR_GRID_SIZE + self.x + self._camera[0]
-                tile_y = y * data.UI_EDITOR_GRID_SIZE + self.y + self._camera[1]
+        current = int(''.join(map(str, map(int, (out+inp)))), 2)
 
-                rect = arcade.XYWH(
+        tile_x = self.x + self._camera[0]
+        tile_y = self.y + self._camera[1]
+
+        rect = arcade.XYWH(
                     x=tile_x,
                     y=tile_y,
-                    width=data.UI_EDITOR_GRID_SIZE,
-                    height=data.UI_EDITOR_GRID_SIZE,
+                    width=width * data.UI_EDITOR_GRID_SIZE,
+                    height=height * data.UI_EDITOR_GRID_SIZE,
                     anchor=arcade.Vec2(0,0)
-                )
+        )
 
-                if current < len(self.gate_tile_pattern):
-                    arcade.draw_texture_rect(self.tiles[self.gate_tile_pattern[current]],rect)
-                current += 1
-            
+        arcade.draw_texture_rect(data.IMAGE.get_texture(self.gate_type,current),rect)
 
-    
+    @profile
     def draw(self):
 
         self.draw_tiles()
