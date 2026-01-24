@@ -47,8 +47,6 @@ class SettingView(arcade.View):
             arcade.exit()
 
     def draw_tile(self,id,x,y):
-        self.back_button.draw()
-
         rect = arcade.XYWH(
             x=x,
             y=y,
