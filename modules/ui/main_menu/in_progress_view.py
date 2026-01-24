@@ -213,4 +213,3 @@ class MainMenuView(arcade.View):
 
             if self.setting_button.touched:
                 data.window.display(SettingView())
-                print (f"bouton presse")
