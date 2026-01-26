@@ -1,6 +1,9 @@
 import arcade
 from modules.ui.toolbox.entity import Entity
 from modules.data import data
+from modules.logger import Logger
+
+logger = Logger("DebugTilesView")
 
 class DebugTilesView(arcade.View):
 
@@ -61,7 +64,7 @@ class DebugTilesView(arcade.View):
                     count=ts["count"]
                 )
             except Exception as e:
-                print(f"Error loading tileset {ts['name']}: {e}")
+                logger.error(f"Error loading tileset {ts['name']}: {e}")
                 ts["textures"] = []
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
@@ -136,11 +139,11 @@ class DebugTilesView(arcade.View):
 
         elif key == arcade.key.RIGHT:
             self.current_index = (self.current_index + 1) % len(self.tilesets)
-            print(f"Switched to: {self.tilesets[self.current_index]['name']}")
+            logger.debug(f"Switched to: {self.tilesets[self.current_index]['name']}")
 
         elif key == arcade.key.LEFT:
             self.current_index = (self.current_index - 1) % len(self.tilesets)
-            print(f"Switched to: {self.tilesets[self.current_index]['name']}")
+            logger.debug(f"Switched to: {self.tilesets[self.current_index]['name']}")
 
     def on_key_release(self, key, key_modifiers):
         pass

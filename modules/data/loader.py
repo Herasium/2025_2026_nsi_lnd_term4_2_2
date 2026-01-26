@@ -1,13 +1,20 @@
-from os import listdir
-from os.path import isfile, join, isdir
-import zlib
 import json
+import traceback
+import zlib
+from os import listdir
+from os.path import isdir, isfile, join
+
+import arcade
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+
 from modules.data import data
 from modules.data.chip import Chip
-import arcade
-import traceback
 from modules.data.gate_index import gate_types
-from PIL import Image,ImageFont,ImageDraw
+from modules.logger import Logger
+
+logger = Logger("Loader")
 
 def load_saves():
 
@@ -30,7 +37,7 @@ def load_saves():
             loaded = json.loads(dump)
             read.append(loaded)
         except Exception as e:
-            print(f"Failed to read file {complete} ({e})")
+            logger.error(f"Failed to read file {complete} ({e})")
 
     for i in read:
         try:
@@ -38,8 +45,8 @@ def load_saves():
             new.load(i)
             data.loaded_chips[i["id"]] = new
         except Exception as e: 
-             print(f"Failed to load chip \n\n{i}\n\n")
-             print(traceback.format_exc())
+             logger.error(f"Failed to load chip \n\n{i}\n\n")
+             logger.error(traceback.format_exc())
 
 def load_tiles():
         
@@ -79,6 +86,36 @@ def bake_background_grid_texture():
             new.paste(data.ui_border_tiles[9].image, (start_x + (a)*64,start_y- (i+1)*64))
         
     data.background_grid_texture = arcade.Texture(new)
+
+def bake_editor_border_texture():
+    canvas = Image.new("RGBA", (1920, 14*64))
+
+    def paste(idx, x, y):
+        img = data.ui_border_tiles[idx].image
+        canvas.paste(img, (x, y))
+
+    start_x = 0 
+    start_y = 0
+    paste(0, start_x, start_y)
+    for i in range(28):
+        paste(1, start_x + (i + 1) * 64, start_y)
+    paste(3, start_x + 29 * 64, start_y)
+
+    side_len = 13
+    for i in range(side_len - 1):
+        y = start_y + (i + 1) * 64
+        paste(4, start_x, y)
+        paste(7, start_x + 29 * 64, y)
+
+    bottom_y = start_y + side_len * 64
+    for idx, off in [(12, 0), (13, 1), (5, 2), (6, 3), (10, 4)]:
+        paste(idx, start_x + off * 64, bottom_y)
+
+    for i in range(24):
+        paste(13, start_x + (i + 5) * 64, bottom_y)
+
+    paste(15, start_x + 29 * 64, bottom_y)
+    data.editor_border_texture = arcade.Texture(image=canvas)
 
 def render_gate_image(gate):
     width = gate.tile_width
@@ -132,12 +169,12 @@ def bake_gate_texture(gate_id):
     data.IMAGE.complete_gate(gate_id)
 
 def bake_textures():
-    print("Baking Textures")
+    logger.debug("Baking Textures")
     bake_background_grid_texture()
+    bake_editor_border_texture()
 
     for i in gate_types:
         bake_gate_texture(i)
 
-    print(data.IMAGE.buffer)
 def load_textures():
     bake_textures()

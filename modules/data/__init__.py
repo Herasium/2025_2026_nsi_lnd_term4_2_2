@@ -32,6 +32,7 @@ class Data:
         self.WINDOW_HEIGHT = 1080
         self.WINDOW_FULLSCREEN = True
         self.UI_EDITOR_GRID_SIZE = 27
+        self.VERSION = "a.111"
         self.COLORS = COLORS
         self.IMAGE = ImageBuffer()
 

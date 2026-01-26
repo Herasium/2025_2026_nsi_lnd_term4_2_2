@@ -56,7 +56,7 @@ class Gate(Node):
                 )
 
         self.tiles = data.gate_tiles
-        self.draw_hitboxes = True
+        self.draw_hitboxes = False
         self.exceptional_size_offset = 0
 
         self.calculate_display()
@@ -260,8 +260,6 @@ class Gate(Node):
     def draw(self):
 
         self.draw_tiles()
-        self.bg_text.draw()
-        self.text.draw()
 
         if self.draw_hitboxes:
             for i in self.inputs_hitboxes:

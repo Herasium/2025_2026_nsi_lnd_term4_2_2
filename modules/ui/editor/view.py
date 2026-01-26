@@ -1,6 +1,7 @@
 import arcade
 from line_profiler import profile
 from PIL import Image
+import time
 
 from modules.ui.mouse import mouse
 from modules.ui.toolbox.entity import Entity
@@ -60,23 +61,18 @@ class EditorView(arcade.View):
 
         self.camera_hold = False
         self.fps = 0
+        self.delta_time = 1
+        self.frame_count = 0
+        self.last_time = 1
 
-        self.bake_textures()
+        self.stress_test = False
 
+        if self.stress_test:
+            self.perf_graph_list = arcade.SpriteList()
 
-    def bake_textures(self):
-
-        start_x = 0
-        y_len = int(1088/64)
-        start_y = 1088
-
-        new = Image.new("RGBA",(1920,1088))
-
-        for i in range(y_len):
-            for a in range(int(1920/64)):
-                new.paste(data.ui_border_tiles[9].image, (start_x + (a)*64,start_y- (i+1)*64))
-        
-        self.background_grid_texture = arcade.Texture(new)
+            graph = arcade.PerfGraph(400, 400, graph_data="FPS")
+            graph.position = 200, 200
+            self.perf_graph_list.append(graph)
 
 
     def draw_tile(self,id,x,y):
@@ -118,29 +114,16 @@ class EditorView(arcade.View):
         pass
 
     def draw_frame_border(self):
-        start_x = 0
-        start_y = 1080-64
 
-        self.draw_tile(0,start_x,start_y)
-        for i in range(28):
-            self.draw_tile(1,start_x + (i+1)*64,start_y)
-        self.draw_tile(3,start_x+29*64,start_y)
+        rect = arcade.XYWH(
+                x=0,
+                y=1080-(14*64),
+                width=1920,
+                height=14*64,
+                anchor=arcade.Vec2(0,0)
+            )
 
-        y_len = 13
-
-        for i in range(y_len-1):
-            self.draw_tile(4,start_x,start_y - (i+1)*64)
-            self.draw_tile(7,start_x+29*64,start_y - (i+1)*64)
-
-
-        self.draw_tile(12,start_x,start_y - y_len*64)
-        self.draw_tile(13,start_x + 64,start_y- y_len*64)
-        self.draw_tile(5,start_x + 2*64,start_y- y_len*64)
-        self.draw_tile(6,start_x + 3*64,start_y- y_len*64)
-        self.draw_tile(10,start_x + 4*64,start_y- y_len*64)
-        for i in range(24):
-            self.draw_tile(13,start_x + (i+5)*64,start_y- y_len*64)
-        self.draw_tile(15,start_x+29*64,start_y- y_len*64)
+        arcade.draw_texture_rect(data.editor_border_texture,rect)
 
     def draw_frame_background(self):
 
@@ -152,14 +135,15 @@ class EditorView(arcade.View):
                 anchor=arcade.Vec2(0,0)
             )
 
-        arcade.draw_texture_rect(self.background_grid_texture,rect)
+        arcade.draw_texture_rect(data.background_grid_texture,rect)
 
 
     def draw_debug_text(self):
 
         debug_list = [
             f"Camera: {self.camera_position}",
-            f"FPS: {self.fps}",
+            f"FPS: {self.fps} / {round(self.delta_time*100000)/100} ms / {self.frame_count}",
+            f"Objects: {len(self.chip.gates.keys())}g/{len(self.chip.paths.keys())}p"
         ]
 
         start_y = 1080-70
@@ -192,13 +176,26 @@ class EditorView(arcade.View):
         if self.selected_follower:
             self.selected_follower.draw()
 
-        self.render_side_bar()
-        self.draw_frame_border()
         self.draw_debug_text()
+        self.draw_frame_border()
+
+        if self.stress_test:
+            self.perf_graph_list.draw()
+
+        self.frame_count += 1
+        self.delta_time = time.time() - self.last_time
+        self.last_time = time.time()
 
     def on_update(self, delta_time):
-        self.fps = 1/delta_time*100//100
+        self.fps = 1/self.delta_time*10000//10000
         self.simulate()
+        
+
+        if self.stress_test:
+            for _ in range(100):
+                id = random_id()
+                new = self.cursors[0](id)
+                self.chip.gates[id] = new
 
     def on_key_press(self, key, key_modifiers):
 

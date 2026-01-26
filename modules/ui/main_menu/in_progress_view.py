@@ -9,10 +9,12 @@ from modules.ui.main_menu.settings_view import SettingView
 from modules.data.nodes.path import Path
 
 from modules.data import data
+from modules.logger import Logger
 
 from pyglet.graphics import Batch
 import sys
 
+logger = Logger("MainMenu")
 
 class MainMenuView(arcade.View):
 
@@ -199,16 +201,19 @@ class MainMenuView(arcade.View):
                 data.window.hide()
                 if key_modifiers == 16 or key_modifiers == 0:
                     data.window.display(EditorView())
+                    logger.success("Launching EditorView.")
                 elif key_modifiers == 17 or key_modifiers == 1:
                     data.window.display(DebugTilesView())
+                    logger.print("Launching DebugTilesView.")
                 elif key_modifiers == 2 or key_modifiers == 18:
                     data.window.display(MainMenuView())
-
+                    logger.print("Launching Main Menu ???")
                 else:
-                    print(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
+                    logger.warning(f"Modificator not found, defaulting to EditorView. ({key_modifiers})")
                     data.window.display(EditorView())
             
             if self.quit_button.touched:
+                logger.success("Bye Bye ! <3")
                 arcade.exit()
 
             if self.setting_button.touched:

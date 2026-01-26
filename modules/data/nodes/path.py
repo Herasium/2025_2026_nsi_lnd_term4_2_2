@@ -35,7 +35,7 @@ class Path(Node):
         self.input_on_color = arcade.types.Color.from_hex_string(data.COLORS.VALUE_ON)
 
         self.current_value = False
-        self.draw_hitboxes = True
+        self.draw_hitboxes = False
 
         self.do_points = True
         self._camera = (0,0)
@@ -240,7 +240,7 @@ class Path(Node):
 
         self.recalculate_hitbox()
 
-
+    @profile
     def draw(self):
 
         self.color = self.input_on_color if self.current_value else self.input_off_color
@@ -253,8 +253,9 @@ class Path(Node):
                     new_pts.append((i[0] + self._camera[0], i[1] + self._camera[1]))
 
                 if self.do_points:
-                    arcade.draw_circle_filled(center_x=pts[0][0] + self._camera[0],center_y=pts[0][1] + self._camera[1],radius=self.thickness,color=self.color)
-                    arcade.draw_circle_filled(center_x=pts[-1][0] + self._camera[0],center_y=pts[-1][1] + self._camera[1],radius=self.thickness,color=self.color)
+                    if bid > 0:
+                        arcade.draw_circle_filled(center_x=pts[0][0] + self._camera[0],center_y=pts[0][1] + self._camera[1],radius=self.thickness,color=self.color)
+                        #arcade.draw_circle_filled(center_x=pts[-1][0] + self._camera[0],center_y=pts[-1][1] + self._camera[1],radius=self.thickness,color=self.color)
                 arcade.draw_line_strip(
                     point_list=new_pts,
                     color=self.color,

@@ -8,9 +8,9 @@ class Window():
         
         self.width = data.WINDOW_WIDTH
         self.height = data.WINDOW_HEIGHT
-        self.title = "Starting Template"
+        self.title = "LogicBox"
 
-        self.window = arcade.Window(self.width, self.height, self.title,fullscreen=data.WINDOW_FULLSCREEN)
+        self.window = arcade.Window(self.width, self.height, self.title,fullscreen=data.WINDOW_FULLSCREEN, update_rate = 0.01)
 
     def run(self):
         arcade.run()
