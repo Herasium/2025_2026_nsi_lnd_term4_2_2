@@ -34,6 +34,9 @@ class MainMenuView(arcade.View):
         self.play_button_sprite = arcade.Sprite("assets/play_button.png")
         self.name_banner_sprite = arcade.Sprite("assets/name_banner.png")
         self.quit_button_sprite = arcade.Sprite("assets/button_quit.png")
+        self.level_button_sprite = arcade.Sprite("assets/button_level.png")
+        self.setting_button_sprite = arcade.Sprite("assets/button_options.png")
+        self.sandbox_button_sprite = arcade.Sprite("assets/button_sandbox.png")
 
         self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
 
@@ -51,18 +54,32 @@ class MainMenuView(arcade.View):
         self.play_button.scale = 1
 
         self.quit_button = Button(self.ui_tiles)
-        self.quit_button.x = 1920 / 2 + (768/3*2) - 265 - 192 / 2
-        self.quit_button.y = 260 + 100 + 240 / 2
+        self.quit_button.x = 1920 - 490
+        self.quit_button.y = 260 + 170
         self.quit_button.width = 192
         self.quit_button.height = 215
         self.quit_button.scale = 1
 
         self.setting_button = Button(self.ui_tiles)
-        self.setting_button.x = 1920 / 2 - 700 / 2 - 5
-        self.setting_button.y = 260 + 100 + 240 / 2
-        self.setting_button.width = 192
-        self.setting_button.height = 215
+        self.setting_button.x = 1920 / 7
+        self.setting_button.y = 260 + 180 
+        self.setting_button.width = 200*1.5
+        self.setting_button.height = 100*1.5
         self.setting_button.scale = 1
+
+        self.level_button = Button(self.ui_tiles)
+        self.level_button.x = 1920 / 2 - 200
+        self.level_button.y = 260 + 250
+        self.level_button.width = 180*1.25
+        self.level_button.height = 100*1.25
+        self.level_button.scale = 1
+
+        self.sandbox_button = Button(self.ui_tiles)
+        self.sandbox_button.x = 1920 - 830
+        self.sandbox_button.y = 260 + 168
+        self.sandbox_button.width = 160*1.5
+        self.sandbox_button.height = 100*1.5
+        self.sandbox_button.scale = 1
 
 
         self.paths = []
@@ -172,18 +189,50 @@ class MainMenuView(arcade.View):
         arcade.draw_sprite_rect(self.name_banner_sprite,rect)
 
         rect = arcade.XYWH(
-                x = 1920 / 2 + (768/3*2) - 265,
-                y = 260 + 100,
+                x = 1920 - 490,
+                y = 260 + 170,
                 width = 192,
                 height = 240,
-                anchor = arcade.Vec2(0.5,0.5)
+                anchor = arcade.Vec2(0, 1)
         )
 
         arcade.draw_sprite_rect(self.quit_button_sprite,rect)
 
+        rect = arcade.XYWH(
+                x = 1920 / 7,
+                y = 260 + 180,
+                width = 200*1.5,
+                height = 100*1.5,
+                anchor = arcade.Vec2(0, 1)
+        )
+
+        arcade.draw_sprite_rect(self.setting_button_sprite,rect)
+
+        rect = arcade.XYWH(
+                x = 1920 - 830,
+                y = 260 + 168,
+                width = 160*1.5,
+                height = 100*1.5,
+                anchor = arcade.Vec2(0, 1)
+        )
+
+        arcade.draw_sprite_rect(self.sandbox_button_sprite,rect)
+
+        rect = arcade.XYWH(
+                x = 1920 / 2 - 200,
+                y = 260 + 250,
+                width = 180*1.25,
+                height = 100*1.25,
+                anchor = arcade.Vec2(0, 1)
+        )
+
+        arcade.draw_sprite_rect(self.level_button_sprite,rect)
+
         self.quit_button.draw()
         self.play_button.draw()
         self.setting_button.draw()
+        self.level_button.draw()
+        self.sandbox_button.draw()
         self.draw_frame_border()
         
 
