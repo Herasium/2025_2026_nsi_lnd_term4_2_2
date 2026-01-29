@@ -54,10 +54,10 @@ class MainMenuView(arcade.View):
         self.play_button.scale = 1
 
         self.quit_button = Button(self.ui_tiles)
-        self.quit_button.x = 1920 - 490
-        self.quit_button.y = 260 + 170
-        self.quit_button.width = 192
-        self.quit_button.height = 215
+        self.quit_button.x = 1920 - 350
+        self.quit_button.y = 260 + 125
+        self.quit_button.width = 175
+        self.quit_button.height = 175
         self.quit_button.scale = 1
 
         self.setting_button = Button(self.ui_tiles)
