@@ -117,6 +117,41 @@ def bake_editor_border_texture():
     paste(15, start_x + 29 * 64, bottom_y)
     data.editor_border_texture = arcade.Texture(image=canvas)
 
+def bake_background_grid_texture_small():
+    start_x = 0
+    y_len = 3
+    start_y = 3*64
+
+    new = Image.new("RGBA",(1920,3*64))
+
+    for i in range(y_len):
+        for a in range(int(1920/64)):
+            new.paste(data.ui_border_tiles[9].image, (start_x + (a)*64,start_y- (i+1)*64))
+        
+    data.background_grid_texture_small = arcade.Texture(new)
+
+def bake_editor_border_texture_small():
+    canvas = Image.new("RGBA", (1920, 3*64))
+
+    def paste(idx, x, y):
+        img = data.ui_border_tiles[idx].image
+        canvas.paste(img, (x, y))
+
+    start_x = 0 
+    start_y = 0
+    paste(0, start_x, start_y)
+    for i in range(28):
+        paste(1, start_x + (i + 1) * 64, start_y)
+    paste(3, start_x + 29 * 64, start_y)
+
+    side_len = 3
+    for i in range(side_len - 1):
+        y = start_y + (i + 1) * 64
+        paste(4, start_x, y)
+        paste(7, start_x + 29 * 64, y)
+
+    data.editor_border_texture_small = arcade.Texture(image=canvas)
+
 def render_gate_image(gate):
     width = gate.tile_width
     height = 4
@@ -172,6 +207,8 @@ def bake_textures():
     logger.debug("Baking Textures")
     bake_background_grid_texture()
     bake_editor_border_texture()
+    bake_background_grid_texture_small()
+    bake_editor_border_texture_small()
 
     for i in gate_types:
         bake_gate_texture(i)

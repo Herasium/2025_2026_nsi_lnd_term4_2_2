@@ -23,6 +23,7 @@ from modules.data.nodes.output import Output
 from modules.data.chip import Chip
 
 from modules.data import data
+from modules.data.gate_index import gate_types
 
 from modules.engine.logic import propagate_values
 
@@ -36,17 +37,15 @@ class EditorView(arcade.View):
         self.follower.height = data.UI_EDITOR_GRID_SIZE
         self.follower.width = data.UI_EDITOR_GRID_SIZE
 
+        self.bottom_zone_collider = Entity()
+        self.bottom_zone_collider.x = 0
+        self.bottom_zone_collider.y = 0
+        self.bottom_zone_collider.width = 1920
+        self.bottom_zone_collider.height = 3*64
+
         self.selected_follower = None
         self.moving_gate = None
         self.current_path = None
-
-        self.selected_cursor = 0
-        self.cursors = [
-            Nand,And,Or,Not,Xor,Nor,Input,Output
-        ]
-        self.cursors_names = [
-            "Nand",'And',"Or","Not","Xor","Nor","Input","Output"
-        ]
 
         self.chip = Chip("fihzfp")
 
@@ -55,8 +54,9 @@ class EditorView(arcade.View):
         self._real_camera_position = (0,0)
         self.camera_position = (0,0)
 
-        self.numpad_key_list = [65456,65457,65458,65459,65460,65461,65462,65463,65464,65465]
-        self.add_side_bar()
+        self.bottom_gates = []
+        self.bottom_gate_bar()
+
         self.background_color = arcade.types.Color.from_hex_string("121212")
 
         self.camera_hold = False
@@ -74,6 +74,31 @@ class EditorView(arcade.View):
             graph.position = 200, 200
             self.perf_graph_list.append(graph)
 
+    def bottom_bar_width_sum(self):
+        result = 0
+        for i in self.bottom_gates:
+            result += i.tile_width
+        return result
+
+    def bottom_gate_bar(self):
+
+        for i in gate_types:
+           
+            position = (self.bottom_bar_width_sum()+len(self.bottom_gates))*data.UI_EDITOR_GRID_SIZE + 64 + data.UI_EDITOR_GRID_SIZE
+            self.bottom_gates.append(gate_types[i](f"bottom_gate_{random_id()}"))
+            self.bottom_gates[-1].camera = (0,0)
+            self.bottom_gates[-1].y = (1*data.UI_EDITOR_GRID_SIZE)
+            self.bottom_gates[-1].x = position
+            
+
+    def get_hovered_bottom_gate(self):
+        for i in self.bottom_gates:
+            if i.entity.touched :
+                return i.gate_type
+
+    def draw_bottom_gates(self):
+        for i in self.bottom_gates:
+            i.draw()
 
     def draw_tile(self,id,x,y):
             
@@ -87,28 +112,6 @@ class EditorView(arcade.View):
 
             arcade.draw_texture_rect(data.ui_border_tiles[id],rect)
 
-
-    def add_side_bar(self):
-        self.side_texts = []
-
-        for i in self.cursors_names:
-            new = Text()
-            new.name = f"{len(self.side_texts)}: {str(i)}"
-            new.x = 1700
-            new.y = 1080-50*(len(self.side_texts)+1)
-            new.align = ("left","center")
-            self.side_texts.append(new)
-
-    def render_side_bar(self):
-
-        for i in range(len(self.side_texts)):
-            text = self.side_texts[i]
-            if i == self.selected_cursor:
-                text.color = arcade.color.RED
-            else:
-                text.color = arcade.color.WHITE
-
-            text.draw()
 
     def reset(self):
         pass
@@ -136,6 +139,31 @@ class EditorView(arcade.View):
             )
 
         arcade.draw_texture_rect(data.background_grid_texture,rect)
+
+    def draw_frame_border_small(self):
+
+        rect = arcade.XYWH(
+                x=0,
+                y=0,
+                width=1920,
+                height=3*64,
+                anchor=arcade.Vec2(0,0)
+            )
+
+        arcade.draw_texture_rect(data.editor_border_texture_small,rect)
+
+    def draw_frame_background_small(self):
+
+        rect = arcade.XYWH(
+                x=0,
+                y=0,
+                width=1920,
+                height=3*64,
+                anchor=arcade.Vec2(0,0)
+            )
+
+        arcade.draw_texture_rect(data.background_grid_texture_small,rect)
+
 
 
     def draw_debug_text(self):
@@ -176,30 +204,25 @@ class EditorView(arcade.View):
         if self.selected_follower:
             self.selected_follower.draw()
 
+        self.draw_frame_background_small()
+        self.draw_frame_border_small()
         self.draw_debug_text()
         self.draw_frame_border()
+        self.draw_bottom_gates()
 
         if self.stress_test:
             self.perf_graph_list.draw()
 
         self.frame_count += 1
+        self.delta_time = time.time() - self.last_time
+        self.last_time = time.time()
         
     def on_update(self, delta_time):
-        self.delta_time = delta_time
         self.fps = 1/self.delta_time*10000//10000
         self.simulate()
-        
 
-        if self.stress_test:
-            for _ in range(100):
-                id = random_id()
-                new = self.cursors[0](id)
-                self.chip.gates[id] = new
 
     def on_key_press(self, key, key_modifiers):
-
-        if key in self.numpad_key_list:
-            self.selected_cursor = self.numpad_key_list.index(key)
 
         if key == 101: #e
             for g in self.chip.gates.values():
@@ -406,17 +429,13 @@ class EditorView(arcade.View):
 
         # Place new gate
         if self.selected_follower is None:
-            self.selected_follower =  self.cursors[self.selected_cursor](random_id())
-            self.selected_follower.camera = self.camera
-            self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
-            self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
+            hovered = self.get_hovered_bottom_gate()
+            if hovered in gate_types:
+                self.selected_follower =  gate_types[hovered](random_id())
+                self.selected_follower.camera = self.camera
+                self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
+                self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
 
-        else:
-            self.chip.gates[self.selected_follower.id] = self.selected_follower
-            self.selected_follower.camera = self.camera
-            self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
-            self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
-            self.selected_follower = None
 
 
     def on_mouse_release(self, x, y, button, key_modifiers):
@@ -426,6 +445,18 @@ class EditorView(arcade.View):
 
             for g in self.chip.gates:
                 self.chip.gates[g].camera = self.camera_position
+
+        else:
+            if not self.selected_follower is None:
+
+                if self.bottom_zone_collider.touched:
+                    self.selected_follower = None
+                else:
+                    self.chip.gates[self.selected_follower.id] = self.selected_follower
+                    self.selected_follower.camera = self.camera
+                    self.selected_follower.x = mouse.cursor[0] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[0]
+                    self.selected_follower.y = mouse.cursor[1] - data.UI_EDITOR_GRID_SIZE / 2 - self.camera_position[1]
+                    self.selected_follower = None
 
         self.moving_gate = None
         self.moving_gate_offset = (0, 0)
