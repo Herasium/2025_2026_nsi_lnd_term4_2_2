@@ -37,6 +37,7 @@ class MainMenuView(arcade.View):
         self.level_button_sprite = arcade.Sprite("assets/button_level.png")
         self.setting_button_sprite = arcade.Sprite("assets/button_options.png")
         self.sandbox_button_sprite = arcade.Sprite("assets/button_sandbox.png")
+        self.tuto_button_sprite = arcade.Sprite("assets/button_tuto.png")
 
         self.ui_sheet = arcade.SpriteSheet("assets/ui_grid.png")
 
@@ -67,6 +68,13 @@ class MainMenuView(arcade.View):
         self.setting_button.height = 100*1.5
         self.setting_button.scale = 1
 
+        self.sandbox_button = Button(self.ui_tiles)
+        self.sandbox_button.x = 1920 - 830
+        self.sandbox_button.y = 260 + 168
+        self.sandbox_button.width = 160*1.5
+        self.sandbox_button.height = 100*1.5
+        self.sandbox_button.scale = 1        
+
         self.level_button = Button(self.ui_tiles)
         self.level_button.x = 1920 / 2 - 200
         self.level_button.y = 260 + 250
@@ -74,12 +82,12 @@ class MainMenuView(arcade.View):
         self.level_button.height = 100*1.25
         self.level_button.scale = 1
 
-        self.sandbox_button = Button(self.ui_tiles)
-        self.sandbox_button.x = 1920 - 830
-        self.sandbox_button.y = 260 + 168
-        self.sandbox_button.width = 160*1.5
-        self.sandbox_button.height = 100*1.5
-        self.sandbox_button.scale = 1
+        self.tuto_button = Button(self.ui_tiles)
+        self.tuto_button.x = 1920 / 3 + 60
+        self.tuto_button.y = 260
+        self.tuto_button.width = 200*1.25
+        self.tuto_button.height = 100*1.25
+        self.tuto_button.scale = 1
 
 
         self.paths = []
@@ -228,11 +236,22 @@ class MainMenuView(arcade.View):
 
         arcade.draw_sprite_rect(self.level_button_sprite,rect)
 
+        rect = arcade.XYWH(
+                x = 1920 / 3 + 60,
+                y = 260,
+                width = 200*1.25,
+                height = 100*1.25,
+                anchor = arcade.Vec2(0, 1)
+        )
+
+        arcade.draw_sprite_rect(self.tuto_button_sprite,rect)
+
         self.quit_button.draw()
         self.play_button.draw()
         self.setting_button.draw()
         self.level_button.draw()
         self.sandbox_button.draw()
+        self.tuto_button.draw()
         self.draw_frame_border()
         
 

@@ -168,7 +168,7 @@ class Button:
         self.text.font_size = 18 * self.scale
 
         self.text.draw()
-        self.hitbox.draw()
+        # self.hitbox.draw()
 
     @property
     def touched(self):
